@@ -3,6 +3,9 @@ import {MdKeyboardArrowDown} from 'react-icons/md'
 import {MdMenu} from 'react-icons/md'
 import {MdSearch} from 'react-icons/md'
 import {MdEject} from 'react-icons/md'
+import SideBarOption from './SideBarOption'
+import {get, last} from 'lodash'
+import { createChatNameFromUsers } from '../../Factories'
 
 export default class SideBar extends Component{
 	constructor(props){
@@ -26,7 +29,7 @@ export default class SideBar extends Component{
 	}
 
     render() {
-		const {chats, activeChat, user, setActiveChat, logout} = this.props
+		const {chats, activeChat, user, setActiveChat, logout, users} = this.props
 		const {reciever} = this.state
         return (
             <div id="side-bar">
@@ -49,26 +52,15 @@ export default class SideBar extends Component{
 						{
 						chats.map((chat)=>{
 							if(chat.name){
-								const lastMessage = chat.messages[chat.messages.length - 1];
-								const chatSideName = chat.users.find((name)=>{
-									return name !== this.props.name
-								}) || "Community" 
-								const classNames = (activeChat && activeChat.id === chat.id) ? 'active' : ''
-								
 								return(
-								<div 
-									key={chat.id} 
-									className={`user ${classNames}`}
-									onClick={ ()=>{ setActiveChat(chat) } }
-									>
-									<div className="user-photo">{chatSideName[0].toUpperCase()}</div>
-									<div className="user-info">
-										<div className="name">{chatSideName}</div>
-										{lastMessage && <div className="last-message">{lastMessage.message}</div>}
-									</div>
-									
-								</div>
-							)
+									<SideBarOption
+										key = {chat.id}
+										name= {chat.isCommunity ? chat.name : createChatNameFromUsers(chat.users, user.name)}
+										lastMessage = { get(last(chat.messages), 'message', '')}
+										onClick = { () => {this.props.setActiveChat(chat)}}
+										active = {activeChat!=null ? activeChat.id === chat.id : false }
+									/>
+								)
 							}
 
 							return null

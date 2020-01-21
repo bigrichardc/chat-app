@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import SideBar from './SideBar'
+import SideBar from '../sidebar/SideBar'
 import {COMMUNITY_CHAT, MESSAGE_SENT, MESSAGE_RECIEVED, TYPING, PRIVATE_MESSAGE} from '../../Events'
 import ChatHeading from './ChatHeading'
 import Messages from '../messages/Messages'
@@ -11,7 +11,8 @@ export default class ChatContainer extends Component {
         super(props);
 
         this.state = {
-            chats: [],
+			chats: [],
+			users: ["Dave", "Kev"],
             activeChat: null,
         }
     }
@@ -107,12 +108,13 @@ export default class ChatContainer extends Component {
     render() {
 
         const {user, logout} = this.props
-        const {chats, activeChat} = this.state
+        const {chats, activeChat, users} = this.state
         return (
             <div className="container">
                 <SideBar logout = {logout}
                 chats = {chats}
-                user = {user}
+				user = {user}
+				users = {users}
                 activeChat = {activeChat}
 				setActiveChat = {this.setActiveChat}
 				onSendPrivateMessage={this.sendOpenPrivateMessage}
